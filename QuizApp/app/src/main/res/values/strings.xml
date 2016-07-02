@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">QuizApp</string>
+
+    <string name="question1">What is the full form of the USA?</string>
+    <string name="answer1a">united states of america</string>
+
+
+    <string name="question2">Who is the current prime minister of Pakistan?</string>
+    <string name="answer2a">Imran Khan</string>
+    <string name="answer2b">Mamnoon Hussain</string>
+    <string name="answer2c">Nawaz Shareef</string>
+    <string name="key2">c</string>
+
+
+    <string name="question3">In Android, Button is a child of:</string>
+    <string name="answer3a">View</string>
+    <string name="answer3b">TextView</string>
+    <string name="answer3c">ViewGroup</string>
+    <string name="key3">a,b</string>
+
+
+    <string name="question4">How many eyes does a normal human have?</string>
+    <string name="answer4a">3</string>
+    <string name="answer4b">4</string>
+    <string name="answer4c">2</string>
+    <string name="key4">c</string>
+
+    <string name="question5">Who is the current president of the USA?</string>
+    <string name="answer5a">Barack Obama</string>
+    <string name="answer5b">George W. Bush</string>
+    <string name="answer5c">Tony Blair</string>
+    <string name="key5">a</string>
+
+</resources>
