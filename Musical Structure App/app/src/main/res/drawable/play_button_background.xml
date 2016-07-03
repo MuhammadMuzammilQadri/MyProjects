@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item >
+
+        <shape android:shape="oval"
+            xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+
+
+            <gradient android:startColor="#dfdfdf"
+                android:endColor="@android:color/transparent"
+                android:angle="90"/>
+
+            <!--<solid android:color="#dfdfdf"/>-->
+
+        </shape>
+    </item>
+
+    <item android:bottom="0.5dp"
+    android:left="0.5dp"
+    android:right="0.5dp" >
+
+        <shape android:shape="oval"
+            xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+            <gradient android:startColor="#cccccc"
+                android:endColor="@android:color/transparent"
+                android:angle="90"/>
+
+            <!--<solid android:color="#cccccc"/>-->
+
+        </shape>
+    </item>
+
+    <item android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp" >
+
+        <shape android:shape="oval"
+            xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+            <gradient android:startColor="#ababab"
+                android:endColor="@android:color/transparent"
+                android:angle="90"/>
+
+            <!--<solid android:color="#ababab"/>-->
+
+        </shape>
+    </item>
+
+    <item android:bottom="2dp"
+        android:left="1dp"
+        android:right="1dp">
+        <shape android:shape="oval"
+            xmlns:android="http://schemas.android.com/apk/res/android" >
+
+            <solid android:color="#ff5900"/>
+
+        </shape>
+
+    </item>
+
+    </layer-list>
