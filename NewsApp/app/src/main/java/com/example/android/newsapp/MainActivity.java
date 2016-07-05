@@ -1,20 +1,20 @@
 package com.example.android.newsapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.android.newsapp.model.Data;
 import com.example.android.newsapp.model.DataHandler;
-import com.example.android.newsapp.model.QueryEntries;
 
-import java.util.ArrayList;
+public class MainActivity extends AppCompatActivity implements PullData.OnCompleteListener {
 
-public class MainActivity extends AppCompatActivity implements PullData.OnCompleteListener, PullFeedData.OnCompleteListener {
-
-    public static final String TOPIC = "popular";
+    public static final String TOPIC = "technology/technology";
     ListView listView;
     private CustomArrayAdapter customArrayAdpater;
 
@@ -24,14 +24,12 @@ public class MainActivity extends AppCompatActivity implements PullData.OnComple
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.mylistview);
-        customArrayAdpater = new CustomArrayAdapter(MainActivity.this);
-        listView.setAdapter(customArrayAdpater);
 
         fetchData();
     }
 
     private void fetchData() {
-        PullData pullData = new PullData();
+        PullData pullData = new PullData(MainActivity.this);
         pullData.onCompleteListener = this;
         pullData.execute();
     }
@@ -41,46 +39,24 @@ public class MainActivity extends AppCompatActivity implements PullData.OnComple
         if (object instanceof PullData) {
             Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
             Log.d("Muz", "PullData onSuccess");
+            customArrayAdpater = new CustomArrayAdapter(MainActivity.this, DataHandler.getInstance().getData().getResponse().getResults());
+            listView.setAdapter(customArrayAdpater);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Uri uri = Uri.parse(customArrayAdpater.getItem(position).getWebUrl());
+                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(i);
+                }
+            });
 
-            pullAllFeedData();
-
-        } else if (object instanceof PullFeedData) {
-            Log.d("Muz", "PullFeedData onSuccess, " + DataHandler.getInstance().getData().getQueryResponseData().getEntries().size()
-                    + " == " + DataHandler.getInstance().getFeedDatas().size());
-
-            customArrayAdpater.notifyDataSetChanged();
-
-//            extractDataFromFeedData(DataHandler.getInstance().getFeedDatas());
-
-//            if (DataHandler.getInstance().getData().getQueryResponseData().getEntries().size() ==
-//                    DataHandler.getInstance().getFeedDatas().size()){
-//                customArrayAdpater.notifyDataSetChanged();
-//            }
         }
-
-
-    }
-
-
-    private void pullAllFeedData() {
-        Data data = DataHandler.getInstance().getData();
-        ArrayList<QueryEntries> queryEntries = data.getQueryResponseData().getEntries();
-        for (int i = 0; i < queryEntries.size(); i++) {
-            String queryUrl = queryEntries.get(i).getUrl();
-            PullFeedData pullFeedData = new PullFeedData();
-            pullFeedData.onCompleteListener = this;
-            pullFeedData.execute(queryUrl);
-        }
-
     }
 
     @Override
     public void onFailure(Object object) {
         if (object instanceof PullData) {
             Toast.makeText(this, "Failure", Toast.LENGTH_SHORT).show();
-        } else if (object instanceof PullFeedData) {
-            Log.d("Muz", "PullFeedData onFailure");
-
         }
     }
 

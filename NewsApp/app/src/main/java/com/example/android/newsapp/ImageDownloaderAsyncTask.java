@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.example.android.newsapp.model.Entries;
+import com.example.android.newsapp.model.Results;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -24,11 +24,11 @@ import java.net.URL;
 class ImageDownloaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
     private final BaseAdapter baseAdapter;
-    private Entries entry;
+    private Results results;
 
-    public ImageDownloaderAsyncTask(ImageView imageView, Entries entry, BaseAdapter baseAdapter) {
+    public ImageDownloaderAsyncTask(ImageView imageView, Results results, BaseAdapter baseAdapter) {
         imageViewReference = new WeakReference<ImageView>(imageView);
-        this.entry = entry;
+        this.results = results;
         this.baseAdapter = baseAdapter;
     }
 
@@ -44,8 +44,8 @@ class ImageDownloaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
             if (imageView != null) {
                 if (bitmap != null) {
 //                        imageView.setImageBitmap(bitmap);
-                    if (this.entry.getImage() == null) {
-                        this.entry.setImage(bitmap);
+                    if (this.results.getImage() == null) {
+                        this.results.setImage(bitmap);
                         baseAdapter.notifyDataSetChanged();
                     }
                 } else {

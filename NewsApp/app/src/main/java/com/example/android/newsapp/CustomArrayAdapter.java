@@ -1,6 +1,7 @@
 package com.example.android.newsapp;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.newsapp.model.DataHandler;
-import com.example.android.newsapp.model.Entries;
+import com.example.android.newsapp.model.Results;
 
 import java.util.ArrayList;
 
@@ -21,23 +21,23 @@ public class CustomArrayAdapter extends BaseAdapter {
 
     private final LayoutInflater inflater;
     private final Context context;
-    private final ArrayList<Entries> entriesList = DataHandler.getInstance().getEntriesList();
+    private ArrayList<Results> results = null;
 
-    public CustomArrayAdapter(Context context) {
+    public CustomArrayAdapter(AppCompatActivity context, ArrayList<Results> results) {
         this.context = context;
-//        this.entriesList = items;
+//        this.results = items;
+        this.results = results;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
     @Override
     public int getCount() {
-        return entriesList.size();
+        return results.size();
     }
 
     @Override
-    public Entries getItem(int position) {
-        return entriesList.get(position);
+    public Results getItem(int position) {
+        return results.get(position);
     }
 
     @Override
@@ -58,22 +58,19 @@ public class CustomArrayAdapter extends BaseAdapter {
         }
 
         viewHolder.setUpText(getItem(position));
-        loadImage(getItem(position), viewHolder);
+        loadImage(getItem(position), getItem(position).getFields().getThumbnail(), viewHolder);
 
         return convertView;
     }
 
-    private void loadImage(Entries entry, ViewHolder holder) {
-        if (entry.getImage() == null &&
-                entry.getMediaGroups() != null && entry.getMediaGroups().length > 0
-                && entry.getMediaGroups()[0].getContents() != null && entry.getMediaGroups()[0].getContents().length > 1
-                && entry.getMediaGroups()[0].getContents()[1].getUrl() != null && !entry.getMediaGroups()[0].getContents()[1].getUrl().trim().equals("")) {
+    private void loadImage(Results results, String thumbnail, ViewHolder holder) {
+        if (thumbnail != null && !thumbnail.trim().equals("")) {
 
-            String url = entry.getMediaGroups()[0].getContents()[1].getUrl();
-            new ImageDownloaderAsyncTask(holder.imageView, entry, this).execute(url);
+            String url = thumbnail;
+            new ImageDownloaderAsyncTask(holder.imageView, results, this).execute(url);
 
-        } else if (entry.getImage() != null) {
-            holder.imageView.setImageBitmap(entry.getImage());
+        } else if (results.getImage() != null) {
+            holder.imageView.setImageBitmap(results.getImage());
 
         } else {
             holder.imageView.setImageResource(android.R.drawable.stat_sys_warning);
@@ -91,11 +88,11 @@ public class CustomArrayAdapter extends BaseAdapter {
             imageView = (ImageView) view.findViewById(R.id.imageview);
         }
 
-        void setUpText(Entries entry) {
-            title.setText(entry.getTitle());
-            author.setText(entry.getAuthor().trim().equals("") ? "Author: Unknown" : "Author: " + entry.getAuthor().trim());
-            if (entry.getImage() != null)
-                imageView.setImageBitmap(entry.getImage());
+        void setUpText(Results results) {
+            title.setText(results.getWebTitle());
+            author.setText(results.getSectionName());
+            if (results.getImage() != null)
+                imageView.setImageBitmap(results.getImage());
             else
                 imageView.setImageResource(android.R.drawable.stat_sys_warning);
         }

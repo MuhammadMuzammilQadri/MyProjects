@@ -1,5 +1,6 @@
 package com.example.android.newsapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -21,9 +22,20 @@ import java.net.URL;
 
 class PullData extends AsyncTask<String, String, String> {
 
+    private final Context mContext;
     OnCompleteListener onCompleteListener;
     private HttpURLConnection urlConnection;
     private boolean isSuccessful = true;
+
+    PullData(Context context) {
+        mContext = context;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        Util.showProgressDialog(mContext);
+    }
 
     @Override
     protected String doInBackground(String... args) {
@@ -31,7 +43,7 @@ class PullData extends AsyncTask<String, String, String> {
         StringBuilder result = new StringBuilder();
 
         try {
-            URL url = new URL("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + MainActivity.TOPIC);
+            URL url = new URL("http://content.guardianapis.com/search?tag=" + MainActivity.TOPIC + "&api-key=test&show-fields=thumbnail");
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
@@ -63,7 +75,7 @@ class PullData extends AsyncTask<String, String, String> {
                 Data data = gson.fromJson(result, Data.class);
 
                 try {
-                    if (data.getQueryResponseData().getEntries() == null || data.getQueryResponseData().getEntries().size() < 1) {
+                    if (data.getResponse().getResults() == null || data.getResponse().getResults().size() < 1) {
                         onCompleteListener.onFailure(this);
                         return;
                     }
