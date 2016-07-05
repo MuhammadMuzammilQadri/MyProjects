@@ -5,8 +5,7 @@ package com.example.android.newsapp.model;
  */
 
 
-public class QueryEntries
-{
+public class QueryEntries {
     private String title;
 
     private String link;
@@ -15,50 +14,41 @@ public class QueryEntries
 
     private String url;
 
-    public String getTitle ()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle (String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getLink ()
-    {
+    public String getLink() {
         return link;
     }
 
-    public void setLink (String link)
-    {
+    public void setLink(String link) {
         this.link = link;
     }
 
-    public String getContentSnippet ()
-    {
+    public String getContentSnippet() {
         return contentSnippet;
     }
 
-    public void setContentSnippet (String contentSnippet)
-    {
+    public void setContentSnippet(String contentSnippet) {
         this.contentSnippet = contentSnippet;
     }
 
-    public String getUrl ()
-    {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl (String url)
-    {
+    public void setUrl(String url) {
         this.url = url;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [title = "+title+", link = "+link+", contentSnippet = "+contentSnippet+", url = "+url+"]";
+    public String toString() {
+        return "ClassPojo [title = " + title + ", link = " + link + ", contentSnippet = " + contentSnippet + ", url = " + url + "]";
     }
 }
 

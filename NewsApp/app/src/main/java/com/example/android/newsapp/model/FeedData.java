@@ -5,37 +5,31 @@ package com.example.android.newsapp.model;
  */
 
 
-public class FeedData
-{
+public class FeedData {
     private ResponseData responseData;
 
 
     private String responseStatus;
 
-    public ResponseData getResponseData ()
-    {
+    public ResponseData getResponseData() {
         return responseData;
     }
 
-    public void setResponseData (ResponseData responseData)
-    {
+    public void setResponseData(ResponseData responseData) {
         this.responseData = responseData;
     }
 
-    public String getResponseStatus ()
-    {
+    public String getResponseStatus() {
         return responseStatus;
     }
 
-    public void setResponseStatus (String responseStatus)
-    {
+    public void setResponseStatus(String responseStatus) {
         this.responseStatus = responseStatus;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [responseData = "+responseData+", responseStatus = "+responseStatus+"]";
+    public String toString() {
+        return "ClassPojo [responseData = " + responseData + ", responseStatus = " + responseStatus + "]";
     }
 }
 

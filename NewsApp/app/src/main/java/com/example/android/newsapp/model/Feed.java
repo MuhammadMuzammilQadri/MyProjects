@@ -1,12 +1,14 @@
 package com.example.android.newsapp.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by Muhammad Muzammil on 7/5/2016.
  */
 
 
-public class Feed
-{
+public class Feed {
     private String author;
 
     private String title;
@@ -21,79 +23,67 @@ public class Feed
 
     private String type;
 
-    public String getAuthor ()
-    {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor (String author)
-    {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
-    public String getTitle ()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle (String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getFeedUrl ()
-    {
+    public String getFeedUrl() {
         return feedUrl;
     }
 
-    public void setFeedUrl (String feedUrl)
-    {
+    public void setFeedUrl(String feedUrl) {
         this.feedUrl = feedUrl;
     }
 
-    public String getDescription ()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription (String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getLink ()
-    {
+    public String getLink() {
         return link;
     }
 
-    public void setLink (String link)
-    {
+    public void setLink(String link) {
         this.link = link;
     }
 
-    public Entries[] getEntries ()
-    {
-        return entries;
+    public ArrayList<Entries> getEntries() {
+        if (entries == null)
+            return null;
+        return new ArrayList<Entries>(Arrays.asList(entries));
+//        return entries;
     }
 
-    public void setEntries (Entries[] entries)
-    {
+    public void setEntries(Entries[] entries) {
         this.entries = entries;
     }
 
-    public String getType ()
-    {
+    public String getType() {
         return type;
     }
 
-    public void setType (String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [author = "+author+", title = "+title+", feedUrl = "+feedUrl+", description = "+description+", link = "+link+", entries = "+entries+", type = "+type+"]";
+    public String toString() {
+        return "ClassPojo [author = " + author + ", title = " + title + ", feedUrl = " + feedUrl + ", description = " + description + ", link = " + link + ", entries = " + entries + ", type = " + type + "]";
     }
 }

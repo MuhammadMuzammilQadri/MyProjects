@@ -5,8 +5,7 @@ package com.example.android.newsapp.model;
  */
 
 
-public class Contents
-{
+public class Contents {
     private String height;
 
     private String width;
@@ -17,59 +16,48 @@ public class Contents
 
     private String url;
 
-    public String getHeight ()
-    {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight (String height)
-    {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public String getWidth ()
-    {
+    public String getWidth() {
         return width;
     }
 
-    public void setWidth (String width)
-    {
+    public void setWidth(String width) {
         this.width = width;
     }
 
-    public String getType ()
-    {
+    public String getType() {
         return type;
     }
 
-    public void setType (String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public String getMedium ()
-    {
+    public String getMedium() {
         return medium;
     }
 
-    public void setMedium (String medium)
-    {
+    public void setMedium(String medium) {
         this.medium = medium;
     }
 
-    public String getUrl ()
-    {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl (String url)
-    {
+    public void setUrl(String url) {
         this.url = url;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [height = "+height+", width = "+width+", type = "+type+", medium = "+medium+", url = "+url+"]";
+    public String toString() {
+        return "ClassPojo [height = " + height + ", width = " + width + ", type = " + type + ", medium = " + medium + ", url = " + url + "]";
     }
 }
