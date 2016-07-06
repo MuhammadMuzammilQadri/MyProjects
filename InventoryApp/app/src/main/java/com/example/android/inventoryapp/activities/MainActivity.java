@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.android.inventoryapp.CustomArrayAdapter;
 import com.example.android.inventoryapp.DatabaeRelatedClasses.DatabaseHelper;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int MAIN_TO_ADDNEWPRODUCT = 3;
     private static final int MAIN_TO_DETAIL = 1;
     ListView listView;
+    TextView textView;
     CustomArrayAdapter customArrayAdapter;
     DatabaseHelper databaseHelper;
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeComponents() {
         listView = (ListView) findViewById(R.id.mylistview);
+        textView = (TextView) findViewById(R.id.default_textview);
         new AsyncTask<Void,Void,ArrayList<Product>>(){
 
             @Override
@@ -64,9 +67,21 @@ public class MainActivity extends AppCompatActivity {
                 super.onPostExecute(products);
                 customArrayAdapter = new CustomArrayAdapter(MainActivity.this, products);
                 listView.setAdapter(customArrayAdapter);
+                showHideDefaultTextView();
                 Util.dismissProgressDialog();
             }
         }.execute();
+    }
+
+    private void showHideDefaultTextView() {
+        if (customArrayAdapter.getCount() != 0){
+            textView.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
+        else {
+            textView.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
     }
 
 
@@ -111,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MAIN_TO_DETAIL && resultCode == Activity.RESULT_OK) {
                 customArrayAdapter.notifyDataSetChanged();
+            showHideDefaultTextView();
         }
 
         if (requestCode == MAIN_TO_ADDNEWPRODUCT && resultCode == Activity.RESULT_OK) {
@@ -137,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     protected void onPostExecute(Product product) {
                         super.onPostExecute(product);
                         customArrayAdapter.addItem(product);
+                        showHideDefaultTextView();
+
                     }
                 }.execute();
         }

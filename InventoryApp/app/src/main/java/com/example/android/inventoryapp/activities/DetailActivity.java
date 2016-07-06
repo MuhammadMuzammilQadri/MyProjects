@@ -13,11 +13,12 @@ import android.widget.TextView;
 import com.example.android.inventoryapp.DatabaeRelatedClasses.DatabaseHelper;
 import com.example.android.inventoryapp.InventoryApp;
 import com.example.android.inventoryapp.R;
+import com.example.android.inventoryapp.fragments.ConfirmationDialogFragment;
 import com.example.android.inventoryapp.models.DataHandler;
 import com.example.android.inventoryapp.models.Product;
 
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements ConfirmationDialogFragment.onDismissConfirmationDialogListener {
 
     TextView nameTextView;
     TextView descTextView;
@@ -103,11 +104,21 @@ public class DetailActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataHandler.getCustomArrayAdapter().removeItem(position);
-                product.deleteProduct();    //to delete product from SQL
-                finish();
+                showConfirmationDialog();
             }
         });
+    }
+
+    private void deleteButtonWork() {
+        dataHandler.getCustomArrayAdapter().removeItem(position);
+        product.deleteProduct();    //to delete product from SQL
+        finish();
+    }
+
+    private void showConfirmationDialog() {
+        ConfirmationDialogFragment dialogFragment = ConfirmationDialogFragment.newInstance();
+        dialogFragment.setOnDismissDialogListener(this);
+        dialogFragment.show(this.getSupportFragmentManager(), "ConfirmationDialog");
     }
 
     private void openOrderNowActivity() {
@@ -124,4 +135,8 @@ public class DetailActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 
+    @Override
+    public void onSuccessConfirmationDialog() {
+        deleteButtonWork();
+    }
 }
