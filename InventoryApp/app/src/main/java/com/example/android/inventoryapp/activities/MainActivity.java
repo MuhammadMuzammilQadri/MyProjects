@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import com.example.android.inventoryapp.CustomArrayAdapter;
 import com.example.android.inventoryapp.DatabaeRelatedClasses.DatabaseHelper;
 import com.example.android.inventoryapp.InventoryApp;
 import com.example.android.inventoryapp.R;
+import com.example.android.inventoryapp.Util;
 import com.example.android.inventoryapp.models.Product;
 
 import java.io.FileInputStream;
@@ -63,9 +65,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeComponents() {
         listView = (ListView) findViewById(R.id.mylistview);
-        ArrayList<Product> products = databaseHelper.getAllProducts();
-        customArrayAdapter = new CustomArrayAdapter(MainActivity.this, products);
-        listView.setAdapter(customArrayAdapter);
+        new AsyncTask<Void,Void,ArrayList<Product>>(){
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Util.showProgressDialog(MainActivity.this);
+            }
+
+            @Override
+            protected ArrayList<Product> doInBackground(Void... params) {
+                ArrayList<Product> products = databaseHelper.getAllProducts();
+                return products;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<Product> products) {
+                super.onPostExecute(products);
+                customArrayAdapter = new CustomArrayAdapter(MainActivity.this, products);
+                listView.setAdapter(customArrayAdapter);
+                Util.dismissProgressDialog();
+            }
+        }.execute();
     }
 
 

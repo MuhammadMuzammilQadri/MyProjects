@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -121,15 +122,36 @@ public class AddNewProductActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (firstET && secondET && thirdET && fourthET && fifthIP){
-                    Intent returnIntent = new Intent();
+                    final Intent returnIntent = new Intent();
                     returnIntent.putExtra("name", name.getText().toString());
                     returnIntent.putExtra("mail",mail.getText().toString());
                     returnIntent.putExtra("price",price.getText().toString());
                     returnIntent.putExtra("quantity",quantity.getText().toString());
-                    if (bitmap != null)
-                        saveTempImage(bitmap, returnIntent);
 
-                    setResult(Activity.RESULT_OK, returnIntent);
+                    new AsyncTask<Void,Void,Void>(){
+
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                            Util.showProgressDialog(AddNewProductActivity.this);
+                        }
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            if (bitmap != null)
+                                saveTempImage(bitmap, returnIntent);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            setResult(Activity.RESULT_OK, returnIntent);
+                            Util.dismissProgressDialog();
+                            finish();
+                        }
+                    }.execute();
+
                 } else
                     Toast.makeText(AddNewProductActivity.this, "Please enter all values first", Toast.LENGTH_SHORT).show();
             }

@@ -1,5 +1,6 @@
 package com.example.android.inventoryapp;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
@@ -57,5 +58,17 @@ public class Util {
         return matcher.matches();
     }
 
+    static ProgressDialog progress;
+
+    public static void showProgressDialog(Context context) {
+        progress = ProgressDialog.show(context, "dialog title",
+                "dialog message", true);
+    }
+
+    public static void dismissProgressDialog() {
+        if (progress != null) {
+            progress.dismiss();
+        }
+    }
 
 }
