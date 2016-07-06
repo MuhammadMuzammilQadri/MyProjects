@@ -111,19 +111,17 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void openOrderNowActivity() {
-
         String email = product.getSupplierEmail();
         String emailSubject = "Booking order for " + product.getName();
-        String emailText = "We want to book an order of 15 inventory items.";
+        String emailBody = "We want to book an order of 15 inventory items.";
 
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email}); // recipients
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://path/to/email/attachment"));
-
-        startActivity(emailIntent);
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        String uriText = "mailto:" + Uri.encode(email) +
+                "?subject=" + Uri.encode(emailSubject) +
+                "&body=" + Uri.encode(emailBody);
+        Uri uri = Uri.parse(uriText);
+        emailIntent.setData(uri);
+        startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 
 }

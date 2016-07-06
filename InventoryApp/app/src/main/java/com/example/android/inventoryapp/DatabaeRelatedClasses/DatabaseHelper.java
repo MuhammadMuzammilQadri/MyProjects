@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.example.android.inventoryapp.InventoryApp;
 import com.example.android.inventoryapp.models.Product;
 import com.example.android.inventoryapp.DatabaeRelatedClasses.DatabaseContract.ProductEntry;
 import com.example.android.inventoryapp.Util;
@@ -37,11 +38,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ProductEntry.TABLE_NAME + " (" +
-                    ProductEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    ProductEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL," +
                     ProductEntry.COLUMN_NAME + TEXT_TYPE + COMMA_SEP +
                     ProductEntry.COLUMN_QUANTITY + INT_TYPE + COMMA_SEP +
                     ProductEntry.COLUMN_PRICE + REAL_TYPE + COMMA_SEP +
-                    ProductEntry.COLUMN_IMAGE + BLOB_TYPE +  COMMA_SEP +
+                    ProductEntry.COLUMN_IMAGE + TEXT_TYPE +  COMMA_SEP +
                     ProductEntry.COLUMN_SUPP_EMAIL + TEXT_TYPE +
             " )";
 
@@ -81,9 +82,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public int getHighestID(SQLiteDatabase db) {
+        final String MY_QUERY = "SELECT MAX(id) FROM " + TABLE_NAME;
+        Cursor cur = db.rawQuery(MY_QUERY, null);
+        cur.moveToFirst();
+        int ID = cur.getInt(0);
+        cur.close();
+        return ID;
+    }
 
-//    add Product
+    //    add Product
     public void addProduct(Product product){
+
 
         if (product.getId() != 0)
             throw new RuntimeException("While adding you cant set primary key on your own");
@@ -93,7 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ProductEntry.COLUMN_NAME, product.getName());
         values.put(ProductEntry.COLUMN_QUANTITY, product.getQuantity());
         values.put(ProductEntry.COLUMN_PRICE, product.getPrice());
-        values.put(ProductEntry.COLUMN_IMAGE, Util.getBytes(product.getImage()) );
+        values.put(ProductEntry.COLUMN_IMAGE, Util.savePictureInFileStorage(InventoryApp.getContext(),getHighestID(db)+1,product.getImage()) );
         values.put(ProductEntry.COLUMN_SUPP_EMAIL, product.getSupplierEmail() );
 
         db.insert(ProductEntry.TABLE_NAME,ProductEntry.COLUMN_NAME,values);
@@ -119,7 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(0),
                 cursor.getInt(1),
                 cursor.getDouble(2),
-                Util.getImage(cursor.getBlob(3)),
+                Util.getPictureFromFileStorage(cursor.getString(3)),
                 cursor.getString(4)
         );
 
@@ -136,17 +146,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery,null);
 
         if(cursor.moveToFirst()){
-            cursor.moveToPosition(1);
             do{
                 Product product = new Product(
                         cursor.getInt(0),
                         cursor.getString(1),
                         cursor.getInt(2),
                         cursor.getDouble(3),
-                        Util.getImage(cursor.getBlob(4)),
+                        Util.getPictureFromFileStorage(cursor.getString(4)),
                         cursor.getString(5)
                 );
                 productList.add(product);
+
+                Log.d("idtesting", product.getId()+"");
+
             }while(cursor.moveToNext());
 
         }
@@ -174,7 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ProductEntry.COLUMN_NAME, product.getName());
         values.put(ProductEntry.COLUMN_QUANTITY, product.getQuantity());
         values.put(ProductEntry.COLUMN_PRICE, product.getPrice());
-        values.put(ProductEntry.COLUMN_IMAGE, Util.getBytes(product.getImage()) );
+        values.put(ProductEntry.COLUMN_IMAGE, Util.savePictureInFileStorage(InventoryApp.getContext(),product.getId(),product.getImage()) );
         values.put(ProductEntry.COLUMN_SUPP_EMAIL, product.getSupplierEmail());
 
         return  db.update(ProductEntry.TABLE_NAME,values,ProductEntry.COLUMN_ID + "=?", new String[] {String.valueOf(product.getId())});
