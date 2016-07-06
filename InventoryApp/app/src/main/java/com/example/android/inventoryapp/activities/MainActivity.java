@@ -38,30 +38,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         databaseHelper = DatabaseHelper.getInstance(InventoryApp.getContext());
-//        addSomeDataInSQL();
         initializeComponents();
         setUpListeners();
     }
 
-
-    private void addSomeDataInSQL() {
-        databaseHelper.addProduct(new Product("First",10,50.6, BitmapFactory.decodeResource(getResources(),
-                R.drawable.azizbhatti), "aa&gmail.com"));
-        databaseHelper.addProduct(new Product("Second",11,51.6, BitmapFactory.decodeResource(getResources(),
-                R.drawable.bagheqasim), "bb&hotmail.com"));
-        databaseHelper.addProduct(new Product("Third",12,52.6, BitmapFactory.decodeResource(getResources(),
-                R.drawable.bbqtonight), "cc&live.com"));
-        databaseHelper.addProduct(new Product("Fourth",13,53.6, BitmapFactory.decodeResource(getResources(),
-                R.drawable.botanicalgarden), "dd&yahoo.com"));
-        databaseHelper.addProduct(new Product("Fifth",14,54.6, BitmapFactory.decodeResource(getResources(),
-                R.drawable.cafeaylanto), "ee&hotmail.com"));
-        databaseHelper.addProduct(new Product("Sixth",15,55.6, BitmapFactory.decodeResource(getResources(),
-                R.drawable.clifton), "ff&gmail.com"));
-        databaseHelper.addProduct(new Product("Seventh",16,56.6, BitmapFactory.decodeResource(getResources(),
-                R.drawable.earlyislamiccemetry), "gg&gmail.com"));
-        databaseHelper.addProduct(new Product("Eighth",17,57.6, BitmapFactory.decodeResource(getResources(),
-                R.drawable.empressmarketkarachi), "hh&live.com"));
-    }
 
     private void initializeComponents() {
         listView = (ListView) findViewById(R.id.mylistview);
@@ -137,16 +117,28 @@ public class MainActivity extends AppCompatActivity {
             if (data == null) {
                 return;
             }
-                String name = data.getStringExtra("name");
-                String mail = data.getStringExtra("mail");
-                double price = Double.parseDouble(data.getStringExtra("price")) ;
-                int quantity = Integer.parseInt(data.getStringExtra("quantity"));
-                String filename = data.getStringExtra("image");
-                Bitmap bitmap = loadTempImage(filename);
+                final String name = data.getStringExtra("name");
+                final String mail = data.getStringExtra("mail");
+                final double price = Double.parseDouble(data.getStringExtra("price")) ;
+                final int quantity = Integer.parseInt(data.getStringExtra("quantity"));
+                final String filename = data.getStringExtra("image");
 
-                Product product = new Product(name, quantity, price, bitmap, mail);
-                databaseHelper.addProduct(product);
-            customArrayAdapter.addItem(product);
+
+                new AsyncTask<Void, Void, Product>(){
+                    @Override
+                    protected Product doInBackground(Void... params) {
+                        Bitmap bitmap = loadTempImage(filename);
+                        Product product = new Product(name, quantity, price, bitmap, mail);
+                        databaseHelper.addProduct(product);
+                        return product;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Product product) {
+                        super.onPostExecute(product);
+                        customArrayAdapter.addItem(product);
+                    }
+                }.execute();
         }
     }
 

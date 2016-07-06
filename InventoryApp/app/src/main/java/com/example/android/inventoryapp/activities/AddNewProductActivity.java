@@ -186,6 +186,7 @@ public class AddNewProductActivity extends AppCompatActivity {
         quantity = (EditText) findViewById(R.id.quantity);
         imagePicker = (Button) findViewById(R.id.imagePicker);
         doneButton = (Button) findViewById(R.id.doneButton);
+        imagePath = (TextView) findViewById(R.id.imagePath);
     }
 
     public void pickImage() {
@@ -195,15 +196,20 @@ public class AddNewProductActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_PHOTO_FOR_PRODUCT);
     }
 
+    TextView imagePath;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
         if (requestCode == PICK_PHOTO_FOR_PRODUCT && resultCode == Activity.RESULT_OK) {
             if (data == null) {
+                imagePath.setText("");
                 return;
             }
 
             try {
+                imagePath.setText(data.getData().getPath());
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                 bitmap = BitmapFactory.decodeStream(inputStream);
                 fifthIP = true;

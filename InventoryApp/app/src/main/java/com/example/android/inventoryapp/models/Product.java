@@ -1,6 +1,7 @@
 package com.example.android.inventoryapp.models;
 
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 
 import com.example.android.inventoryapp.DatabaeRelatedClasses.DatabaseHelper;
 import com.example.android.inventoryapp.InventoryApp;
@@ -87,8 +88,14 @@ public class Product {
     }
 
     private void updateQuantityInSql() {
-        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(InventoryApp.getContext());
-        databaseHelper.updateProduct(this);
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                DatabaseHelper databaseHelper = DatabaseHelper.getInstance(InventoryApp.getContext());
+                databaseHelper.updateProduct(Product.this);
+                return null;
+            }
+        }.execute();
     }
 
 
@@ -97,8 +104,14 @@ public class Product {
     }
 
     private void deleteProductInSql() {
-        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(InventoryApp.getContext());
-        databaseHelper.deleteProduct(this.getId());
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                DatabaseHelper databaseHelper = DatabaseHelper.getInstance(InventoryApp.getContext());
+                databaseHelper.deleteProduct(Product.this.getId());
+                return null;
+            }
+        }.execute();
     }
 
     public String getSupplierEmail() {
