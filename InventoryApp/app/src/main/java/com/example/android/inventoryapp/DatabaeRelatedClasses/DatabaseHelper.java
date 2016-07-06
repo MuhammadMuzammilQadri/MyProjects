@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ProductEntry.TABLE_NAME + " (" +
-                    ProductEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL," +
+                    ProductEntry.COLUMN_ID + " INTEGER PRIMARY KEY," +
                     ProductEntry.COLUMN_NAME + TEXT_TYPE + COMMA_SEP +
                     ProductEntry.COLUMN_QUANTITY + INT_TYPE + COMMA_SEP +
                     ProductEntry.COLUMN_PRICE + REAL_TYPE + COMMA_SEP +
@@ -99,6 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             throw new RuntimeException("While adding you cant set primary key on your own");
 
         SQLiteDatabase db = this.getWritableDatabase();
+        product.setId(getHighestID(db)+1);
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_NAME, product.getName());
         values.put(ProductEntry.COLUMN_QUANTITY, product.getQuantity());
@@ -108,6 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert(ProductEntry.TABLE_NAME,ProductEntry.COLUMN_NAME,values);
         db.close();
+
     }
 
 //    get specific Product
