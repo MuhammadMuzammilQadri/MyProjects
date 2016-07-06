@@ -48,6 +48,11 @@ public class CustomArrayAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void addItem(Product product){
+        products.add(product);
+        notifyDataSetChanged();
+    }
+
     @Override
     public long getItemId(int position) {
         return 0;

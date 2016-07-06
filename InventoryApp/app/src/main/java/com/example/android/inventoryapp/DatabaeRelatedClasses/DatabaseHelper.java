@@ -176,8 +176,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 //    update Product
     public int updateProduct(Product product){
-        if (product.getId() <= 0)
-            throw new RuntimeException("While updating Product ID can not be less than equal to zero");
+        if (product.getId() < 0)
+            throw new RuntimeException("While updating Product ID can not be less than zero");
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -197,7 +197,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //    delete Product
     public void deleteProduct(int productId){
 
-        if (productId <= 0)
+        if (productId < 0)
             throw new RuntimeException("While deleting Product ID can not be less than equal to zero");
 
         SQLiteDatabase db = this.getWritableDatabase();
