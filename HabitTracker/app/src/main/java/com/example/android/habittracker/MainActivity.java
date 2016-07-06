@@ -29,12 +29,18 @@ public class MainActivity extends AppCompatActivity {
 
         printHabits();
 
+        Log.d("testing","Specific Habit");
+        Habit habit = databaseHelper.getHabit(1);
+        Log.d("testing", "ID: " + habit.getHabitId() + ", TITLE: " +
+                habit.getHabitTitle() + ", DURATION: " + habit.getHabitDuartionInMinutes());
+
         Log.d("testing","Deleting entries..");
         databaseHelper.deleteAllHabits();
         printHabits();
     }
 
     private void printHabits() {
+
         ArrayList<Habit> list = databaseHelper.getAllHabits();
         for (Habit habit : list) {
             Log.d("testing", "ID: " + habit.getHabitId() + ", TITLE: " +
